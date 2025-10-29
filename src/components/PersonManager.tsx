@@ -27,7 +27,7 @@ const PersonManager = ({
   };
 
   return (
-    <Card className="p-6">
+    <Card className="p-6 animate-fade-in">
       <h2 className="mb-4 text-xl font-semibold flex items-center gap-2">
         <User className="h-5 w-5 text-primary" />
         اختر الشخص
@@ -47,12 +47,13 @@ const PersonManager = ({
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-        {persons.map((person) => (
+        {persons.map((person, index) => (
           <Button
             key={person}
             variant={selectedPerson === person ? "default" : "outline"}
             onClick={() => onSelectPerson(person)}
-            className="justify-start"
+            className="justify-start animate-scale-in transition-all hover:scale-105"
+            style={{ animationDelay: `${index * 0.05}s` }}
           >
             {person}
           </Button>

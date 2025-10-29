@@ -64,7 +64,7 @@ const Index = () => {
     }
   };
 
-  const addOrder = (pastryName: string, price: number) => {
+  const addOrder = (pastryName: string, price: number, quantity: number = 1) => {
     const personOrders = orders[selectedPerson] || [];
     const existingOrder = personOrders.find((o) => o.pastry === pastryName);
 
@@ -72,20 +72,34 @@ const Index = () => {
       setOrders({
         ...orders,
         [selectedPerson]: personOrders.map((o) =>
-          o.pastry === pastryName ? { ...o, quantity: o.quantity + 1 } : o
+          o.pastry === pastryName ? { ...o, quantity: o.quantity + quantity } : o
         ),
       });
     } else {
       setOrders({
         ...orders,
-        [selectedPerson]: [...personOrders, { pastry: pastryName, quantity: 1, price }],
+        [selectedPerson]: [...personOrders, { pastry: pastryName, quantity, price }],
       });
     }
 
     toast({
       title: "تمت الإضافة",
-      description: `تم إضافة ${pastryName} لطلب ${selectedPerson}`,
+      description: `تم إضافة ${quantity} ${pastryName} لطلب ${selectedPerson}`,
     });
+  };
+
+  const addOneToOrder = (person: string, pastryName: string) => {
+    const personOrders = orders[person] || [];
+    const existingOrder = personOrders.find((o) => o.pastry === pastryName);
+
+    if (existingOrder) {
+      setOrders({
+        ...orders,
+        [person]: personOrders.map((o) =>
+          o.pastry === pastryName ? { ...o, quantity: o.quantity + 1 } : o
+        ),
+      });
+    }
   };
 
   const removeOrder = (person: string, pastryName: string) => {
@@ -202,6 +216,7 @@ const Index = () => {
             orders={orders}
             persons={persons}
             onRemoveOrder={removeOrder}
+            onAddOrder={addOneToOrder}
             calculatePersonTotal={calculatePersonTotal}
           />
         )}
